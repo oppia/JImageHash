@@ -28,7 +28,7 @@ load("@rules_jvm_external//:defs.bzl", "maven_install")
 
 maven_install(
     artifacts = [
-        "dev.brachtendorf:UtilityCode:2.0.1",
+        "dev.brachtendorf:pcg-java-10:1.0.1",
         "com.github.wendykierp:JTransforms:3.1",
     ],
     repositories = [
