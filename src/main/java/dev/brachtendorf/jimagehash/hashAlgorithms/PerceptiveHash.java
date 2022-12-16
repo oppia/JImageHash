@@ -1,6 +1,6 @@
 package dev.brachtendorf.jimagehash.hashAlgorithms;
 
-import java.awt.image.BufferedImage;
+import android.graphics.Bitmap;
 import java.math.BigInteger;
 import java.util.Objects;
 import java.util.logging.Logger;
@@ -67,7 +67,7 @@ public class PerceptiveHash extends HashingAlgorithm {
 	}
 
 	@Override
-	protected BigInteger hash(BufferedImage image, HashBuilder hash) {
+	protected BigInteger hash(Bitmap image, HashBuilder hash) {
 		FastPixel fp = createPixelAccessor(image, width, height);
 
 		int[][] lum = fp.getLuma();

@@ -1,6 +1,6 @@
 package dev.brachtendorf.jimagehash.hashAlgorithms;
 
-import java.awt.image.BufferedImage;
+import android.graphics.Bitmap;
 import java.math.BigInteger;
 import java.util.Objects;
 
@@ -83,7 +83,7 @@ public class RotAverageHash extends HashingAlgorithm {
 	}
 
 	@Override
-	protected BigInteger hash(BufferedImage image, HashBuilder hash) {
+	protected BigInteger hash(Bitmap image, HashBuilder hash) {
 		FastPixel fp = createPixelAccessor(image, width, height);
 
 		// We need 2 more bucket since we compare to n-1 and no values are mapped to 0

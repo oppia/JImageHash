@@ -1,6 +1,7 @@
 package dev.brachtendorf.jimagehash.hash;
 
-import java.awt.image.BufferedImage;
+import android.graphics.Bitmap;
+import android.graphics.Color;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -12,7 +13,6 @@ import java.util.logging.Logger;
 
 import dev.brachtendorf.graphics.ColorUtil;
 import dev.brachtendorf.jimagehash.hashAlgorithms.HashingAlgorithm;
-import javafx.scene.paint.Color;
 
 /**
  * A fuzzy hash is an aggregation of multiple hashes mapped to a single mean
@@ -813,13 +813,13 @@ public class FuzzyHash extends Hash {
 	 *                  during hash creation.
 	 * @return A black and white image representing the individual bits of the hash
 	 */
-	public BufferedImage toImage(int blockSize) {
+	public Bitmap toImage(int blockSize) {
 
 		ensureUpToDateHash();
 
 		// Build color palette
-		Color[] lowerCol = ColorUtil.ColorPalette.getPalette(15, Color.web("#ff642b"), Color.web("#ffff7c"));
-		Color[] higherCol = ColorUtil.ColorPalette.getPalette(15, Color.web("#ffff7c"), Color.GREEN);
+		Color[] lowerCol = ColorUtil.ColorPalette.getPalette(15, Color.valueOf(Color.parseColor("#ff642b")), Color.valueOf(Color.parseColor("#ffff7c")));
+		Color[] higherCol = ColorUtil.ColorPalette.getPalette(15, Color.valueOf(Color.parseColor("#ffff7c")), Color.valueOf(Color.GREEN));
 
 		Color[] colors = new Color[lowerCol.length + higherCol.length];
 		System.arraycopy(lowerCol, 0, colors, 0, lowerCol.length);
@@ -836,13 +836,13 @@ public class FuzzyHash extends Hash {
 		return toImage(colorIndex, colors, blockSize);
 	}
 
-	public BufferedImage toImage(int blockSize, HashingAlgorithm hashingAlgorithm) {
+	public Bitmap toImage(int blockSize, HashingAlgorithm hashingAlgorithm) {
 
 		ensureUpToDateHash();
 
 		// Build color palette
-		Color[] lowerCol = ColorUtil.ColorPalette.getPalette(15, Color.web("#ff642b"), Color.web("#ffff7c"));
-		Color[] higherCol = ColorUtil.ColorPalette.getPalette(15, Color.web("#ffff7c"), Color.GREEN);
+		Color[] lowerCol = ColorUtil.ColorPalette.getPalette(15, Color.valueOf(Color.parseColor("#ff642b")), Color.valueOf(Color.parseColor("#ffff7c")));
+		Color[] higherCol = ColorUtil.ColorPalette.getPalette(15, Color.valueOf(Color.parseColor("#ffff7c")), Color.valueOf(Color.GREEN));
 
 		Color[] colors = new Color[lowerCol.length + higherCol.length];
 		System.arraycopy(lowerCol, 0, colors, 0, lowerCol.length);

@@ -1,6 +1,6 @@
 package dev.brachtendorf.jimagehash.hashAlgorithms.filter;
 
-import java.awt.image.BufferedImage;
+import android.graphics.Bitmap;
 import java.io.Serializable;
 
 /**
@@ -16,6 +16,6 @@ public interface Filter extends Serializable{
 	 * @param bi the input image to apply the filter on
 	 * @return the altered image
 	 */
-	public BufferedImage filter(BufferedImage bi);
+	public Bitmap filter(Bitmap bi);
 	
 }

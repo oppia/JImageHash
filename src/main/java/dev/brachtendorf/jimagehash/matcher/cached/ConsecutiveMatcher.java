@@ -1,6 +1,6 @@
 package dev.brachtendorf.jimagehash.matcher.cached;
 
-import java.awt.image.BufferedImage;
+import android.graphics.Bitmap;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -36,10 +36,10 @@ import dev.brachtendorf.jimagehash.matcher.TypedImageMatcher;
 public class ConsecutiveMatcher extends TypedImageMatcher {
 
 	/** keep track of images already added. No reason to rehash */
-	protected HashSet<BufferedImage> addedImages = new HashSet<>();
+	protected HashSet<Bitmap> addedImages = new HashSet<>();
 
 	/** Binary Tree holding results for each individual hashing algorithm */
-	protected HashMap<HashingAlgorithm, BinaryTree<BufferedImage>> binTreeMap = new HashMap<>();
+	protected HashMap<HashingAlgorithm, BinaryTree<Bitmap>> binTreeMap = new HashMap<>();
 
 	/**
 	 * Append a new hashing algorithm which will be executed after all hash
@@ -56,7 +56,7 @@ public class ConsecutiveMatcher extends TypedImageMatcher {
 	public void addHashingAlgorithm(HashingAlgorithm algo, double threshold, boolean normalized) {
 		super.addHashingAlgorithm(algo, threshold, normalized);
 
-		BinaryTree<BufferedImage> binTree = new BinaryTree<>(true);
+		BinaryTree<Bitmap> binTree = new BinaryTree<>(true);
 		binTreeMap.put(algo, binTree);
 
 		// Also add all images which were added to the image matcher earlier
@@ -102,7 +102,7 @@ public class ConsecutiveMatcher extends TypedImageMatcher {
 	 * 
 	 * @param image The image whose hash will be added to the matcher
 	 */
-	public void addImage(BufferedImage image) {
+	public void addImage(Bitmap image) {
 		if (steps.isEmpty())
 			throw new IllegalStateException(
 					"Please supply at least one hashing algorithm prior to invoking the match method");
@@ -113,7 +113,7 @@ public class ConsecutiveMatcher extends TypedImageMatcher {
 
 		for (Entry<HashingAlgorithm, AlgoSettings> entry : steps.entrySet()) {
 			HashingAlgorithm algo = entry.getKey();
-			BinaryTree<BufferedImage> binTree = binTreeMap.get(algo);
+			BinaryTree<Bitmap> binTree = binTreeMap.get(algo);
 			binTree.addHash(algo.hash(image), image);
 		}
 		addedImages.add(image);
@@ -125,8 +125,8 @@ public class ConsecutiveMatcher extends TypedImageMatcher {
 	 * 
 	 * @param imagesToAdd The images whose hash will be added to the matcher
 	 */
-	public void addImages(BufferedImage... imagesToAdd) {
-		for (BufferedImage img : imagesToAdd) {
+	public void addImages(Bitmap... imagesToAdd) {
+		for (Bitmap img : imagesToAdd) {
 			this.addImage(img);
 		}
 	}
@@ -141,18 +141,18 @@ public class ConsecutiveMatcher extends TypedImageMatcher {
 	 *         <a href="https://en.wikipedia.org/wiki/Hamming_distance">hamming
 	 *         distance</a> of the last applied algorithms
 	 */
-	public PriorityQueue<Result<BufferedImage>> getMatchingImages(BufferedImage image) {
+	public PriorityQueue<Result<Bitmap>> getMatchingImages(Bitmap image) {
 
 		if (steps.isEmpty())
 			throw new IllegalStateException(
 					"Please supply at least one hashing algorithm prior to invoking the match method");
 
-		PriorityQueue<Result<BufferedImage>> returnValues = null;
+		PriorityQueue<Result<Bitmap>> returnValues = null;
 
 		for (Entry<HashingAlgorithm, AlgoSettings> entry : steps.entrySet()) {
 			HashingAlgorithm algo = entry.getKey();
 
-			BinaryTree<BufferedImage> binTree = binTreeMap.get(algo);
+			BinaryTree<Bitmap> binTree = binTreeMap.get(algo);
 			AlgoSettings settings = entry.getValue();
 
 			Hash needleHash = algo.hash(image);
@@ -165,7 +165,7 @@ public class ConsecutiveMatcher extends TypedImageMatcher {
 				threshold = (int) settings.getThreshold();
 			}
 
-			PriorityQueue<Result<BufferedImage>> temp = binTree.getElementsWithinHammingDistance(needleHash, threshold);
+			PriorityQueue<Result<Bitmap>> temp = binTree.getElementsWithinHammingDistance(needleHash, threshold);
 
 			if (returnValues == null) {
 				returnValues = temp;

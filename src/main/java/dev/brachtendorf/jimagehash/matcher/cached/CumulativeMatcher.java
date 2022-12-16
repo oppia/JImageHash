@@ -1,6 +1,6 @@
 package dev.brachtendorf.jimagehash.matcher.cached;
 
-import java.awt.image.BufferedImage;
+import android.graphics.Bitmap;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map.Entry;
@@ -140,7 +140,7 @@ public class CumulativeMatcher extends ConsecutiveMatcher {
 	}
 
 	@Override
-	public PriorityQueue<Result<BufferedImage>> getMatchingImages(BufferedImage image) {
+	public PriorityQueue<Result<Bitmap>> getMatchingImages(Bitmap image) {
 
 		if (steps.isEmpty())
 			throw new IllegalStateException(
@@ -151,7 +151,7 @@ public class CumulativeMatcher extends ConsecutiveMatcher {
 		double maxDistanceUntilTermination = overallSetting.getThreshold();
 
 		// [Result,Summed distance of the image]
-		HashMap<Result<BufferedImage>, Double> distanceMap = new HashMap<>();
+		HashMap<Result<Bitmap>, Double> distanceMap = new HashMap<>();
 
 		// During first iteration we need to do some extra hoops
 		boolean first = true;
@@ -163,9 +163,9 @@ public class CumulativeMatcher extends ConsecutiveMatcher {
 		for (Entry<HashingAlgorithm, AlgoSettings> entry : steps.entrySet()) {
 			HashingAlgorithm algo = entry.getKey();
 
-			HashMap<Result<BufferedImage>, Double> temporaryMap;
+			HashMap<Result<Bitmap>, Double> temporaryMap;
 
-			BinaryTree<BufferedImage> binTree = binTreeMap.get(algo);
+			BinaryTree<Bitmap> binTree = binTreeMap.get(algo);
 
 			// Init temporary hashmap
 			int optimalCapacity = (int) (Math
@@ -185,14 +185,14 @@ public class CumulativeMatcher extends ConsecutiveMatcher {
 				threshold = (int) maxDistanceUntilTermination;
 			}
 
-			PriorityQueue<Result<BufferedImage>> temp = binTree.getElementsWithinHammingDistance(needleHash, threshold);
+			PriorityQueue<Result<Bitmap>> temp = binTree.getElementsWithinHammingDistance(needleHash, threshold);
 
 			// Find the min total distance for the next generation to specify our cutoff
 			// parameter
 			double minDistance = Double.MAX_VALUE;
 
 			// filter manually
-			for (Result<BufferedImage> res : temp) {
+			for (Result<Bitmap> res : temp) {
 
 				double normalDistance = entry.getValue().getThreshold() * (res.distance / (double) bitRes);
 
@@ -243,16 +243,16 @@ public class CumulativeMatcher extends ConsecutiveMatcher {
 		}
 
 		// TODO note that we used the normalized distance here
-		PriorityQueue<Result<BufferedImage>> returnValues = new PriorityQueue<>(
-				new Comparator<Result<BufferedImage>>() {
+		PriorityQueue<Result<Bitmap>> returnValues = new PriorityQueue<>(
+				new Comparator<Result<Bitmap>>() {
 					@Override
-					public int compare(Result<BufferedImage> o1, Result<BufferedImage> o2) {
+					public int compare(Result<Bitmap> o1, Result<Bitmap> o2) {
 						return Double.compare(o1.normalizedHammingDistance, o2.normalizedHammingDistance);
 					}
 				});
 
-		for (Entry<Result<BufferedImage>, Double> e : distanceMap.entrySet()) {
-			Result<BufferedImage> matchedImage = e.getKey();
+		for (Entry<Result<Bitmap>, Double> e : distanceMap.entrySet()) {
+			Result<Bitmap> matchedImage = e.getKey();
 			matchedImage.normalizedHammingDistance = e.getValue();
 			returnValues.add(matchedImage);
 		}

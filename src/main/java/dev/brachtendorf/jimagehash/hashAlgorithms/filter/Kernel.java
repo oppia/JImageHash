@@ -1,11 +1,10 @@
 package dev.brachtendorf.jimagehash.hashAlgorithms.filter;
 
-import java.awt.image.BufferedImage;
+import android.graphics.Bitmap;
 import java.util.Arrays;
 import java.util.function.BiFunction;
 
 import dev.brachtendorf.ArrayUtil;
-import dev.brachtendorf.MiscUtil;
 import dev.brachtendorf.Require;
 import dev.brachtendorf.graphics.FastPixel;
 
@@ -683,9 +682,21 @@ public class Kernel implements Filter {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((edgeHandling == null) ? 0 : MiscUtil.consistentHashCode(edgeHandling));
+		result = prime * result + ((edgeHandling == null) ? 0 : consistentHashCode(edgeHandling));
 		result = prime * result + Arrays.deepHashCode(mask);
 		return result;
+	}
+
+	// Cherry-picked from https://github.com/KilianB/UtilityCode/blob/add4e44e/src/main/java/dev/brachtendorf/MiscUtil.java#L200.
+  /**
+	 * Compute a consistent hashcode for enum values
+	 *
+	 * @param e the enum to compute the hashcode for
+	 * @return the hashcode
+	 */
+	private static int consistentHashCode(@SuppressWarnings("rawtypes") Enum e) {
+		return e.name().hashCode() * 31 + e.ordinal() ^ e.getClass().getName().hashCode();
+
 	}
 
 	@Override
@@ -789,8 +800,8 @@ public class Kernel implements Filter {
 	}
 
 	@Override
-	public BufferedImage filter(BufferedImage input) {
-		BufferedImage bi = new BufferedImage(input.getWidth(), input.getHeight(), input.getType());
+	public Bitmap filter(Bitmap input) {
+		Bitmap bi = Bitmap.createBitmap(input.getWidth(), input.getHeight(), input.getConfig(), input.hasAlpha());
 		FastPixel fp = FastPixel.create(input);
 		FastPixel fpSet = FastPixel.create(bi);
 		int[][] red = fp.getRed();
@@ -831,8 +842,8 @@ public class Kernel implements Filter {
 		}
 
 		@Override
-		public BufferedImage filter(BufferedImage input) {
-			BufferedImage bi = new BufferedImage(input.getWidth(), input.getHeight(), input.getType());
+		public Bitmap filter(Bitmap input) {
+			Bitmap bi = Bitmap.createBitmap(input.getWidth(), input.getHeight(), input.getConfig(), input.hasAlpha());
 			FastPixel fp = FastPixel.create(input);
 			FastPixel fpSet = FastPixel.create(bi);
 			int[][] gray = fp.getAverageGrayscale();

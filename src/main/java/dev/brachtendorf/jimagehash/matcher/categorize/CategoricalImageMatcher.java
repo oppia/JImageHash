@@ -1,11 +1,9 @@
 package dev.brachtendorf.jimagehash.matcher.categorize;
 
-import java.awt.image.BufferedImage;
+import android.graphics.Bitmap;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
-
-import javax.imageio.ImageIO;
 
 /**
  * Image matcher allowing to group images into similar categories.
@@ -26,22 +24,6 @@ import javax.imageio.ImageIO;
  * @since 3.0.0
  */
 public interface CategoricalImageMatcher {
-
-	/**
-	 * Compute the category of the supplied image. A category is a collection of
-	 * similar images mapped to a common hash which minimizes the distance of all
-	 * hashes mapped to this category.
-	 * 
-	 * @param imageFile The image to categorize
-	 * @return a pair whose first value returns the category and second value
-	 *         returns a distance measure between the category and the supplied
-	 *         image. Smaller distances meaning a closer match
-	 * @throws IOException if an error occurs during file reading
-	 */
-	default CategorizationResult categorizeImage(File imageFile) throws IOException {
-		return categorizeImage(ImageIO.read(imageFile));
-	}
-
 	/**
 	 * Compute the category of the supplied image. A category is a collection of
 	 * similar images mapped to a common hash which minimizes the distance of all
@@ -52,7 +34,7 @@ public interface CategoricalImageMatcher {
 	 *         returns a distance measure between the category and the supplied
 	 *         image. Smaller distances meaning a closer match
 	 */
-	CategorizationResult categorizeImage(BufferedImage bi);
+	CategorizationResult categorizeImage(Bitmap bi);
 
 	/**
 	 * Compute the closest category of an image and afterwards add it to the
@@ -69,28 +51,7 @@ public interface CategoricalImageMatcher {
 	 * @param uniqueId the unique id to reference the image by.
 	 * @return the currently closest cluster for this image.
 	 */
-	CategorizationResult categorizeImageAndAdd(BufferedImage bi, String uniqueId);
-
-	/**
-	 * Compute the closest category of an image and afterwards add it to the
-	 * internal categorization queue. Some matchers may choose to immediately update
-	 * the current category to reflect the changes.
-	 * 
-	 * <p>
-	 * The <b>add</b> action is implementation depended. Some categorizers may
-	 * choose to directly incorporate the image and update it's category
-	 * representation other algorithms may require a call to
-	 * {@link #recomputeCategories()} before the addition takes effect.
-	 * <p>
-	 * The image will be referenced by the absolute file path as uniqueId.
-	 * 
-	 * @param imageFile the image file to categorize
-	 * @return the currently closest cluster for this image.
-	 * @throws IOException if an error occurs during file reading operation
-	 */
-	default CategorizationResult categorizeImageAndAdd(File imageFile) throws IOException {
-		return categorizeImageAndAdd(ImageIO.read(imageFile), imageFile.getAbsolutePath());
-	}
+	CategorizationResult categorizeImageAndAdd(Bitmap bi, String uniqueId);
 
 	/**
 	 * Get a list of available categories this matcher matched images to. Each

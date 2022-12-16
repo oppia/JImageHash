@@ -1,11 +1,9 @@
 package dev.brachtendorf.jimagehash.matcher.exotic;
 
-import java.awt.image.BufferedImage;
+import android.graphics.Bitmap;
 import java.io.File;
 import java.io.IOException;
 import java.util.Map.Entry;
-
-import javax.imageio.ImageIO;
 
 import dev.brachtendorf.jimagehash.hash.Hash;
 import dev.brachtendorf.jimagehash.hashAlgorithms.HashingAlgorithm;
@@ -20,21 +18,6 @@ import dev.brachtendorf.jimagehash.matcher.TypedImageMatcher;
  *
  */
 public class SingleImageMatcher extends TypedImageMatcher {
-
-	/**
-	 * Execute all supplied hashing algorithms in the order they were supplied and
-	 * check if the images are similar
-	 * 
-	 * @param image  First input image
-	 * @param image1 Second input image
-	 * @return true if images are considered similar
-	 * @throws IOException if an error occurred during image loading
-	 * @see #checkSimilarity(BufferedImage, BufferedImage)
-	 */
-	public boolean checkSimilarity(File image, File image1) throws IOException {
-		return (checkSimilarity(ImageIO.read(image), ImageIO.read(image1)));
-	}
-
 	/**
 	 * Execute all supplied hashing algorithms in the order they were supplied and
 	 * check if the images are similar
@@ -43,7 +26,7 @@ public class SingleImageMatcher extends TypedImageMatcher {
 	 * @param image1 Second input image
 	 * @return true if images are considered similar
 	 */
-	public boolean checkSimilarity(BufferedImage image, BufferedImage image1) {
+	public boolean checkSimilarity(Bitmap image, Bitmap image1) {
 		if (steps.isEmpty())
 			throw new IllegalStateException(
 					"Please supply at least one hashing algorithm prior to invoking the match method");

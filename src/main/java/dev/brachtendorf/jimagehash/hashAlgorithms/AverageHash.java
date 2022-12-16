@@ -1,6 +1,6 @@
 package dev.brachtendorf.jimagehash.hashAlgorithms;
 
-import java.awt.image.BufferedImage;
+import android.graphics.Bitmap;
 import java.math.BigInteger;
 import java.util.Objects;
 
@@ -59,7 +59,7 @@ public class AverageHash extends HashingAlgorithm {
 	}
 
 	@Override
-	protected BigInteger hash(BufferedImage image, HashBuilder hash) {
+	protected BigInteger hash(Bitmap image, HashBuilder hash) {
 		FastPixel fp = createPixelAccessor(image, width, height);
 
 		int[][] luminocity = fp.getLuma();

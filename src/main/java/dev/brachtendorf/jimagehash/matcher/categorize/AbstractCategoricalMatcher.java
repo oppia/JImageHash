@@ -1,6 +1,6 @@
 package dev.brachtendorf.jimagehash.matcher.categorize;
 
-import java.awt.image.BufferedImage;
+import android.graphics.Bitmap;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -26,7 +26,7 @@ public abstract class AbstractCategoricalMatcher extends PlainImageMatcher imple
 	protected Map<Integer, List<String>> cachedImagesInCategory = new HashMap<>();
 	protected Map<String, Integer> reverseImageCategoryMap = new HashMap<>();
 
-	public abstract CategorizationResult categorizeImageAndAdd(BufferedImage bi, String uniqueId);
+	public abstract CategorizationResult categorizeImageAndAdd(Bitmap bi, String uniqueId);
 
 	@Override
 	public int getCategory(String uniqueId) {
@@ -35,11 +35,11 @@ public abstract class AbstractCategoricalMatcher extends PlainImageMatcher imple
 	}
 
 	@Override
-	public CategorizationResult categorizeImage(BufferedImage bi) {
+	public CategorizationResult categorizeImage(Bitmap bi) {
 		return categorizeImage(null, bi);
 	}
 
-	protected abstract CategorizationResult categorizeImage(String uniqueId, BufferedImage bi);
+	protected abstract CategorizationResult categorizeImage(String uniqueId, Bitmap bi);
 
 	/**
 	 * Check if an image has already been added to the categorizer

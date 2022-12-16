@@ -1,6 +1,6 @@
 package dev.brachtendorf.jimagehash.hash;
 
-import java.awt.image.BufferedImage;
+import android.graphics.Bitmap;
 import java.io.File;
 import java.io.IOException;
 
@@ -16,17 +16,9 @@ public class HashUtil {
 		return new FuzzyHash(hashes);
 	};
 	
-	public static FuzzyHash toFuzzyHash(HashingAlgorithm hasher, File... imageFiles) throws IOException {
+	public static FuzzyHash toFuzzyHash(HashingAlgorithm hasher, Bitmap... images){
 		FuzzyHash fuzzy = new FuzzyHash();
-		for(File imgFile : imageFiles) {
-			fuzzy.mergeFast(hasher.hash(imgFile));
-		}
-		return fuzzy;
-	}
-	
-	public static FuzzyHash toFuzzyHash(HashingAlgorithm hasher, BufferedImage... images){
-		FuzzyHash fuzzy = new FuzzyHash();
-		for(BufferedImage image: images) {
+		for(Bitmap image: images) {
 			fuzzy.mergeFast(hasher.hash(image));
 		}
 		return fuzzy;

@@ -1,6 +1,7 @@
 package dev.brachtendorf.jimagehash.hash;
 
-import java.awt.image.BufferedImage;
+import android.graphics.Bitmap;
+import android.graphics.Color;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -14,7 +15,6 @@ import dev.brachtendorf.Require;
 import dev.brachtendorf.StringUtil;
 import dev.brachtendorf.graphics.FastPixel;
 import dev.brachtendorf.jimagehash.hashAlgorithms.HashingAlgorithm;
-import javafx.scene.paint.Color;
 
 /**
  * Hashes are bit encoded encoded values (0101011101) created from images using
@@ -274,8 +274,8 @@ public class Hash implements Serializable {
 	 * 
 	 * @return A black and white image representing the individual bits of the hash
 	 */
-	public BufferedImage toImage(int blockSize) {
-		Color[] colorArr = new Color[] { Color.WHITE, Color.BLACK };
+	public Bitmap toImage(int blockSize) {
+		Color[] colorArr = new Color[] { Color.valueOf(Color.WHITE), Color.valueOf(Color.BLACK) };
 		int[] colorIndex = new int[hashLength];
 
 		for (int i = 0; i < hashLength; i++) {
@@ -298,7 +298,7 @@ public class Hash implements Serializable {
 	 * @return A black and white image representing the individual bits of the hash
 	 * @since 3.0.0
 	 */
-	public BufferedImage toImage(int blockSize, HashingAlgorithm hasher) {
+	public Bitmap toImage(int blockSize, HashingAlgorithm hasher) {
 		return hasher.createAlgorithmSpecificHash(this).toImage(blockSize);
 	}
 
@@ -313,8 +313,9 @@ public class Hash implements Serializable {
 	 *                      hash will be represented to blockSize*blockSize pixels
 	 * @return A colorized image representing the individual bits of the hash
 	 */
-	public BufferedImage toImage(int[] bitColorIndex, Color[] colors, int blockSize) {
-		int width = (int) Math.sqrt(hashLength);
+	public Bitmap toImage(int[] bitColorIndex, Color[] colors, int blockSize) {
+		throw new UnsupportedOperationException("No support for TYPE_3BYTE_BGR.");
+		/*int width = (int) Math.sqrt(hashLength);
 		int height = width;
 
 		BufferedImage bi = new BufferedImage(blockSize * width, blockSize * height, BufferedImage.TYPE_3BYTE_BGR);
@@ -342,7 +343,7 @@ public class Hash implements Serializable {
 				}
 			}
 		}
-		return bi;
+		return bi;*/
 	}
 
 	/**

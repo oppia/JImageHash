@@ -1,6 +1,6 @@
 package dev.brachtendorf.jimagehash.matcher.categorize;
 
-import java.awt.image.BufferedImage;
+import android.graphics.Bitmap;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -68,7 +68,7 @@ public class KMeansClassifier implements CategoricalImageMatcher {
 	}
 
 	@Override
-	public CategorizationResult categorizeImage(BufferedImage bi) {
+	public CategorizationResult categorizeImage(Bitmap bi) {
 		return this.categorizeImage(hasher.hash(bi));
 	}
 
@@ -81,7 +81,7 @@ public class KMeansClassifier implements CategoricalImageMatcher {
 
 	}
 
-	public void addImage(BufferedImage bi, String uniqueId) {
+	public void addImage(Bitmap bi, String uniqueId) {
 		Hash hash = hasher.hash(bi);
 		this.addImage(hash, uniqueId);
 	}
@@ -92,7 +92,7 @@ public class KMeansClassifier implements CategoricalImageMatcher {
 	}
 
 	@Override
-	public CategorizationResult categorizeImageAndAdd(BufferedImage bi, String uniqueId) {
+	public CategorizationResult categorizeImageAndAdd(Bitmap bi, String uniqueId) {
 		Hash hash = hasher.hash(bi);
 		//Only add it to the queue
 		this.addImage(hash, uniqueId);

@@ -1,6 +1,6 @@
 package dev.brachtendorf.jimagehash.hashAlgorithms.filter;
 
-import java.awt.image.BufferedImage;
+import android.graphics.Bitmap;
 
 import dev.brachtendorf.Require;
 import dev.brachtendorf.graphics.FastPixel;
@@ -80,7 +80,7 @@ public class SobelFilter implements Filter {
 	}
 
 	@Override
-	public BufferedImage filter(BufferedImage bi) {
+	public Bitmap filter(Bitmap bi) {
 
 		FastPixel fp = FastPixel.create(bi);
 
@@ -108,7 +108,7 @@ public class SobelFilter implements Filter {
 		}
 		
 		
-		BufferedImage returnBi = new BufferedImage(bi.getWidth(), bi.getHeight(), bi.getType());
+		Bitmap returnBi = Bitmap.createBitmap(bi.getWidth(), bi.getHeight(), bi.getConfig(), bi.hasAlpha());
 		FastPixel fpSet = FastPixel.create(returnBi);
 
 		fpSet.setAverageGrayscale(result);

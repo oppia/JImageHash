@@ -1,7 +1,7 @@
 package dev.brachtendorf.jimagehash.hashAlgorithms;
 
-import java.awt.Color;
-import java.awt.image.BufferedImage;
+import android.graphics.Bitmap;
+import android.graphics.Color;
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
@@ -9,8 +9,6 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-
-import javax.imageio.ImageIO;
 
 import dev.brachtendorf.Require;
 import dev.brachtendorf.graphics.ColorUtil;
@@ -68,8 +66,9 @@ public abstract class HashingAlgorithm implements Serializable {
 	 */
 	private int algorithmId;
 
+	// This value comes from https://docs.oracle.com/javase/8/javafx/api/javafx/scene/paint/Color.html#ORANGE.
 	/** Color used in replacement of opaque pixels */
-	protected Color opaqueReplacementColor = Color.orange;
+	protected Color opaqueReplacementColor = Color.valueOf(0xffa500);//Color.orange;
 
 	/** Maximum alpha value a pixel must have in order to be replaced */
 	protected int opaqueReplacementThreshold = -1;
@@ -187,7 +186,7 @@ public abstract class HashingAlgorithm implements Serializable {
 	 * @see Hash
 	 * @since 3.0.0
 	 */
-	public Hash[] hash(BufferedImage... images) {
+	public Hash[] hash(Bitmap... images) {
 		Hash[] returnValue = new Hash[images.length];
 
 		for (int i = 0; i < images.length; i++) {
@@ -208,14 +207,14 @@ public abstract class HashingAlgorithm implements Serializable {
 	 * @see Hash
 	 * @since 3.0.0
 	 */
-	public Hash[] hash(File... imageFiles) throws IOException {
+	/*public Hash[] hash(File... imageFiles) throws IOException {
 		Hash[] returnValue = new Hash[imageFiles.length];
 
 		for (int i = 0; i < imageFiles.length; i++) {
 			returnValue[i] = this.hash(imageFiles[i]);
 		}
 		return returnValue;
-	}
+	}*/
 
 	/**
 	 * Calculate a hash for the given image. Invoking the hash function on the same
@@ -227,9 +226,9 @@ public abstract class HashingAlgorithm implements Serializable {
 	 * @return The hash representing the image
 	 * @see Hash
 	 */
-	public Hash hash(BufferedImage image) {
+	public Hash hash(Bitmap image) {
 
-		BufferedImage bi = image;
+		Bitmap bi = image;
 
 		// If we have kernels defined alter red green and blue values accordingly
 		if (!preProcessing.isEmpty()) {
@@ -267,10 +266,10 @@ public abstract class HashingAlgorithm implements Serializable {
 	 * @throws IOException if an error occurs during loading the image
 	 * @see Hash
 	 */
-	public Hash hash(File imageFile) throws IOException {
+	/*public Hash hash(File imageFile) throws IOException {
 		immutableState = true;
 		return hash(ImageIO.read(imageFile));
-	}
+	}*/
 
 	/**
 	 * Calculate a hash for the given image. Invoking the hash function on the same
@@ -290,11 +289,11 @@ public abstract class HashingAlgorithm implements Serializable {
 	 * @param hashBuilder a hash builder used to construct the hash
 	 * @return the hash encoded as a big integer
 	 */
-	protected abstract BigInteger hash(BufferedImage image, HashBuilder hashBuilder);
+	protected abstract BigInteger hash(Bitmap image, HashBuilder hashBuilder);
 
-	protected FastPixel createPixelAccessor(BufferedImage image, int width, int height) {
+	protected FastPixel createPixelAccessor(Bitmap image, int width, int height) {
 
-		BufferedImage scaledInstance = ImageUtil.getScaledInstance(image, width, height);
+		Bitmap scaledInstance = ImageUtil.getScaledInstance(image, width, height);
 		FastPixel fp = FastPixel.create(scaledInstance);
 
 		// If opaque handling is specified and the image has an alpha channel
@@ -307,8 +306,8 @@ public abstract class HashingAlgorithm implements Serializable {
 			 */
 			if (this.opaqueReplacementColor == null) {
 
-				javafx.scene.paint.Color interpolatedColor = ImageUtil.interpolateColor(image);
-				Color replacementColor = ColorUtil.getContrastColor(ColorUtil.fxToAwtColor(interpolatedColor));
+				Color interpolatedColor = ImageUtil.interpolateColor(image);
+				Color replacementColor = ColorUtil.getContrastColor(interpolatedColor);
 				fp.setReplaceOpaqueColors(this.opaqueReplacementThreshold, replacementColor);
 			} else {
 				fp.setReplaceOpaqueColors(this.opaqueReplacementThreshold, this.opaqueReplacementColor);
@@ -391,7 +390,8 @@ public abstract class HashingAlgorithm implements Serializable {
 		// If they key resolution is not know compute a sample hash and cache it's
 		// return value
 		if (keyResolution < 0) {
-			BufferedImage bi = new BufferedImage(1, 1, BufferedImage.TYPE_3BYTE_BGR);
+			// XXX: Previous code used a TYPE_3BYTE_BGR BufferedImage.
+			Bitmap bi = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888);
 			HashBuilder sb = new HashBuilder(this.bitResolution);
 			this.hash(bi, sb);
 			keyResolution = sb.length;

@@ -1,6 +1,6 @@
 package dev.brachtendorf.jimagehash.matcher.persistent;
 
-import java.awt.image.BufferedImage;
+import android.graphics.Bitmap;
 import java.util.Map.Entry;
 import java.util.PriorityQueue;
 
@@ -36,7 +36,7 @@ public class ConsecutiveMatcher extends PersitentBinaryTreeMatcher {
 
 	private static final long serialVersionUID = 831914616034052308L;
 
-	protected PriorityQueue<Result<String>> getMatchingImagesInternal(BufferedImage image, String uniqueId) {
+	protected PriorityQueue<Result<String>> getMatchingImagesInternal(Bitmap image, String uniqueId) {
 
 		if (steps.isEmpty())
 			throw new IllegalStateException(

@@ -1,13 +1,13 @@
 package dev.brachtendorf.jimagehash.hashAlgorithms;
 
-import java.awt.image.BufferedImage;
+import android.graphics.Bitmap;
+import android.graphics.Color;
 import java.math.BigInteger;
 import java.util.Objects;
 
 
 import dev.brachtendorf.graphics.FastPixel;
 import dev.brachtendorf.jimagehash.hash.Hash;
-import javafx.scene.paint.Color;
 
 /**
  * Calculates a hash based on gradient tracking. This hash is cheap to compute
@@ -92,7 +92,7 @@ public class DifferenceHash extends HashingAlgorithm {
 	}
 
 	@Override
-	protected BigInteger hash(BufferedImage image, HashBuilder hash) {
+	protected BigInteger hash(Bitmap image, HashBuilder hash) {
 		FastPixel fp = createPixelAccessor(image, width, height);
 
 		// Use data buffer for faster access
@@ -179,7 +179,7 @@ public class DifferenceHash extends HashingAlgorithm {
 	 * hash to an image.
 	 */
 	@Override
-	public Hash hash(BufferedImage image) {
+	public Hash hash(Bitmap image) {
 		return new DHash(super.hash(image), this.precision, width, height);
 	}
 
@@ -207,9 +207,9 @@ public class DifferenceHash extends HashingAlgorithm {
 			this.height = height;
 		}
 
-		public BufferedImage toImage(int blockSize) {
+		public Bitmap toImage(int blockSize) {
 
-			Color[] colorArr = new Color[] { Color.WHITE, Color.BLACK };
+			Color[] colorArr = new Color[] { Color.valueOf(Color.WHITE), Color.valueOf(Color.BLACK) };
 			int[] colorIndex = new int[hashLength];
 
 			for (int i = 0; i < hashLength; i++) {
@@ -218,9 +218,11 @@ public class DifferenceHash extends HashingAlgorithm {
 			return toImage(colorIndex, colorArr, blockSize);
 		}
 
-		public BufferedImage toImage(int[] bitColorIndex, Color[] colors, int blockSize) {
+		public Bitmap toImage(int[] bitColorIndex, Color[] colors, int blockSize) {
+			// TODO: Implement if this is actually needed.
+			throw new UnsupportedOperationException("No support for TYPE_3BYTE_BGR.");
 
-			if (precision.equals(Precision.Simple)) {
+			/*if (precision.equals(Precision.Simple)) {
 
 				BufferedImage bi = new BufferedImage(blockSize * width, blockSize * height,
 						BufferedImage.TYPE_3BYTE_BGR);
@@ -250,7 +252,7 @@ public class DifferenceHash extends HashingAlgorithm {
 						colors);
 				drawDoublePrecision(fp, width, 1, height, 1, blockSize, hashOffset, 2 * height, bitColorIndex, colors);
 				return bi;
-			}
+			}*/
 		}
 
 		private int drawDoublePrecision(FastPixel writer, int width, int wOffset, int height, int hOffset,
@@ -259,9 +261,9 @@ public class DifferenceHash extends HashingAlgorithm {
 			for (int w = 0; w < (width - wOffset) * blockSize; w = w + blockSize) {
 				for (int h = 0; h < (height - hOffset) * blockSize; h = h + blockSize) {
 					Color c = colors[bitColorIndex[i++]];
-					int red = (int) (c.getRed() * 255);
-					int green = (int) (c.getGreen() * 255);
-					int blue = (int) (c.getBlue() * 255);
+					int red = (int) (c.red() * 255);
+					int green = (int) (c.green() * 255);
+					int blue = (int) (c.blue() * 255);
 
 					for (int m = 0; m < blockSize; m++) {
 						for (int n = 0; n < blockSize; n++) {

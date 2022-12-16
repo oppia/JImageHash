@@ -1,6 +1,6 @@
 package dev.brachtendorf.jimagehash.matcher.persistent;
 
-import java.awt.image.BufferedImage;
+import android.graphics.Bitmap;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -12,8 +12,6 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.PriorityQueue;
 import java.util.logging.Logger;
-
-import javax.imageio.ImageIO;
 
 import dev.brachtendorf.jimagehash.datastructures.tree.Result;
 import dev.brachtendorf.jimagehash.hash.Hash;
@@ -73,63 +71,7 @@ public abstract class PersistentImageMatcher extends TypedImageMatcher implement
 	}
 
 	/**
-	 * Index the image. This enables the image matcher to find the image in future
-	 * searches. The database image matcher does not store the image data itself but
-	 * indexes the hash bound to the absolute path of the image.
-	 * 
-	 * <p>
-	 * The path of the file has to be unique in order for this operation to return
-	 * deterministic results.
-	 * 
-	 * @param imageFile The image whose hash will be added to the matcher
-	 * @throws IOException if an error exists reading the file
-	 */
-	public void addImage(File imageFile) throws IOException {
-		addImage(imageFile.getAbsolutePath(), imageFile);
-	}
-
-	/**
-	 * Add the images to the matcher allowing the image to be found in future
-	 * searches.
-	 * 
-	 * @param imagesToAdd The images whose hash will be added to the matcher
-	 * @throws IOException if an error exists reading the image files
-	 */
-	public void addImages(File... imagesToAdd) throws IOException {
-		for (File img : imagesToAdd) {
-			this.addImage(img);
-		}
-	}
-
-	/**
-	 * Index the image. This enables the image matcher to find the image in future
-	 * searches. The database image matcher does not store the image data itself but
-	 * indexes the hash bound to the absolute path of the image.
-	 * 
-	 * <p>
-	 * The uniqueId has to be globally unique in order for this operation to return
-	 * deterministic results.
-	 * 
-	 * @param uniqueId  a unique identifier returned if querying for the image
-	 * @param imageFile The image whose hash will be added to the matcher
-	 * @throws IOException if an error exists reading the file
-	 * @since 2.0.2
-	 */
-	public void addImage(String uniqueId, File imageFile) throws IOException {
-		if (steps.isEmpty())
-			throw new IllegalStateException(
-					"Please supply at least one hashing algorithm prior to invoking the match method");
-
-		if (!imageFile.isFile()) {
-			throw new IllegalArgumentException(
-					"Please make sure you add an image to the matcher. Directories are not supported");
-		}
-
-		addImage(uniqueId, ImageIO.read(imageFile));
-	}
-
-	/**
-	 * 
+	 *
 	 * 
 	 * <p>
 	 * <b>Implnote:</b> if this method is overwritten the class has to make sure
@@ -139,7 +81,11 @@ public abstract class PersistentImageMatcher extends TypedImageMatcher implement
 	 * @param uniqueId a unique identifier describing the image
 	 * @param image    The image whose hash will be added to the matcher
 	 */
-	public void addImage(String uniqueId, BufferedImage image) {
+	public void addImage(String uniqueId, Bitmap image) {
+		if (steps.isEmpty())
+			throw new IllegalStateException(
+					"Please supply at least one hashing algorithm prior to invoking the match method");
+
 		addImageInternal(uniqueId, image);
 		lockedState = true;
 	}
@@ -150,20 +96,7 @@ public abstract class PersistentImageMatcher extends TypedImageMatcher implement
 	 * @param uniqueId the unique id to refer to during lookup
 	 * @param image    the image to add
 	 */
-	protected abstract void addImageInternal(String uniqueId, BufferedImage image);
-
-	/**
-	 * Return a list of images that are considered matching by the definition of
-	 * this matcher.
-	 * 
-	 * @param image the image to check all saved images against
-	 * @return a list of unique id's identifying the previously matched images
-	 *         sorted by distance.
-	 * @throws IOException if an error occurs reading the file
-	 */
-	public PriorityQueue<Result<String>> getMatchingImages(File image) throws IOException {
-		return getMatchingImages(ImageIO.read(image));
-	}
+	protected abstract void addImageInternal(String uniqueId, Bitmap image);
 
 	/**
 	 * Search for all similar images passing the algorithm filters supplied to this
@@ -174,7 +107,7 @@ public abstract class PersistentImageMatcher extends TypedImageMatcher implement
 	 * @return a list of unique id's identifying the previously matched images
 	 *         sorted by distance of the last applied algorithm
 	 */
-	public abstract PriorityQueue<Result<String>> getMatchingImages(BufferedImage image);
+	public abstract PriorityQueue<Result<String>> getMatchingImages(Bitmap image);
 
 	/**
 	 * Serialize this image matcher to a file. Serialized matchers keep their

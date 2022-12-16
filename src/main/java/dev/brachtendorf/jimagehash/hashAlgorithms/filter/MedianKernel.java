@@ -1,6 +1,6 @@
 package dev.brachtendorf.jimagehash.hashAlgorithms.filter;
 
-import java.awt.image.BufferedImage;
+import android.graphics.Bitmap;
 import java.util.Arrays;
 
 import dev.brachtendorf.ArrayUtil;
@@ -114,8 +114,8 @@ public class MedianKernel extends NonAveragingKernel {
 	
 	
 	@Override
-	public BufferedImage filter(BufferedImage input) {
-		BufferedImage bi = new BufferedImage(input.getWidth(), input.getHeight(), input.getType());
+	public Bitmap filter(Bitmap input) {
+		Bitmap bi = Bitmap.createBitmap(input.getWidth(), input.getHeight(), input.getConfig(), input.hasAlpha());
 		FastPixel fp = FastPixel.create(input);
 		FastPixel fpSet = FastPixel.create(bi);
 		int[][] gray = fp.getAverageGrayscale();

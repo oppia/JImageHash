@@ -1,6 +1,6 @@
 package dev.brachtendorf.jimagehash.hashAlgorithms;
 
-import java.awt.image.BufferedImage;
+import android.graphics.Bitmap;
 import java.math.BigInteger;
 import java.util.Objects;
 
@@ -59,7 +59,7 @@ public class WaveletHash extends HashingAlgorithm {
 	}
 
 	@Override
-	protected BigInteger hash(BufferedImage image, HashBuilder hashBuilder) {
+	protected BigInteger hash(Bitmap image, HashBuilder hashBuilder) {
 
 		// Rescale
 		FastPixel fp = createPixelAccessor(image, width, height);

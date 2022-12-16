@@ -1,12 +1,10 @@
 package dev.brachtendorf.jimagehash.matcher.exotic;
 
-import java.awt.image.BufferedImage;
+import android.graphics.Bitmap;
 import java.io.File;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.logging.Logger;
-
-import javax.imageio.ImageIO;
 
 import dev.brachtendorf.ArrayUtil;
 import dev.brachtendorf.jimagehash.Experimental;
@@ -179,25 +177,11 @@ public class BloomFilter extends PlainImageMatcher {
 	 * algorithms was already added to the bloom filter with the curren false
 	 * positive probability as returned by {@link #getFalsePositiveProbability()}
 	 * 
-	 * @param file of the image to check
-	 * @return false if the image is definitely not in the filter, true if the image
-	 *         might be in the set.
-	 * @throws IOException if an error occurs during file reading
-	 */
-	public boolean isPresent(File file) throws IOException {
-		return isPresent(ImageIO.read(file));
-	}
-
-	/**
-	 * Checks if the hash created by this image utilizing the added hashing
-	 * algorithms was already added to the bloom filter with the curren false
-	 * positive probability as returned by {@link #getFalsePositiveProbability()}
-	 * 
 	 * @param image to check
 	 * @return false if the image is definitely not in the filter, true if the image
 	 *         might be in the set.
 	 */
-	public boolean isPresent(BufferedImage image) {
+	public boolean isPresent(Bitmap image) {
 
 		Iterator<HashingAlgorithm> iter = this.steps.iterator();
 		for (int j = 0; j < this.steps.size(); j++) {
@@ -225,25 +209,8 @@ public class BloomFilter extends PlainImageMatcher {
 	 * {@link #clearHashingAlgorithms()}.
 	 * 
 	 * @param image The image to add
-	 * @throws IOException if an error occurs during file reading.
 	 */
-	public void addImage(File image) throws IOException {
-		addImage(ImageIO.read(image));
-	}
-
-	/**
-	 * Adds the hashes produced by the added hashing algorithm of this image to the
-	 * filter. Future calls to {@link #isPresent(File)} will return true for the
-	 * image.
-	 * <p>
-	 * Adding an image to the filter will prevent further modifications of the
-	 * filter in terms of calling {@link #addHashingAlgorithm(HashingAlgorithm)},
-	 * {@link #removeHashingAlgorithm(HashingAlgorithm)} or
-	 * {@link #clearHashingAlgorithms()}.
-	 * 
-	 * @param image The image to add
-	 */
-	public void addImage(BufferedImage image) {
+	public void addImage(Bitmap image) {
 		lock();
 
 		Iterator<HashingAlgorithm> iter = this.steps.iterator();
@@ -265,7 +232,7 @@ public class BloomFilter extends PlainImageMatcher {
 	 * @param image  the image to hash
 	 * @return an integer hashcode
 	 */
-	protected int imageToHashCode(HashingAlgorithm hasher, BufferedImage image) {
+	protected int imageToHashCode(HashingAlgorithm hasher, Bitmap image) {
 		Hash hash = hasher.hash(image);
 
 		int hashCode = hash.getHashValue().hashCode();

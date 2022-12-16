@@ -1,6 +1,6 @@
 package dev.brachtendorf.jimagehash.hashAlgorithms;
 
-import java.awt.image.BufferedImage;
+import android.graphics.Bitmap;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -95,7 +95,7 @@ public class RotPHash extends HashingAlgorithm {
 	}
 
 	@Override
-	protected BigInteger hash(BufferedImage image, HashBuilder hash) {
+	protected BigInteger hash(Bitmap image, HashBuilder hash) {
 
 		// 0. Preprocessing. Extract Luminosity
 		// Fast pixel access. Order 10x faster than jdk internal

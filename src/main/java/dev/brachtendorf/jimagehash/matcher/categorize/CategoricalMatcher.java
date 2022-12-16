@@ -1,6 +1,6 @@
 package dev.brachtendorf.jimagehash.matcher.categorize;
 
-import java.awt.image.BufferedImage;
+import android.graphics.Bitmap;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
@@ -21,7 +21,6 @@ import dev.brachtendorf.datastructures.Pair;
 import dev.brachtendorf.jimagehash.hash.FuzzyHash;
 import dev.brachtendorf.jimagehash.hash.Hash;
 import dev.brachtendorf.jimagehash.hashAlgorithms.HashingAlgorithm;
-import dev.brachtendorf.jimagehash.matcher.categorize.supervised.LabeledImage;
 
 /**
  * Cluster images into common categories. This matcher clusters images by
@@ -281,7 +280,7 @@ public class CategoricalMatcher extends AbstractCategoricalMatcher {
 	 * 
 	 * @param images the images to categories
 	 */
-	public void addCategoricalImages(Collection<LabeledImage> images) {
+	/*public void addCategoricalImages(Collection<LabeledImage> images) {
 		addCategoricalImages(images.toArray(new LabeledImage[images.size()]));
 	}
 
@@ -293,9 +292,9 @@ public class CategoricalMatcher extends AbstractCategoricalMatcher {
 
 	public double addCategoricalImage(LabeledImage labeledImage) {
 		return addCategoricalImage(labeledImage.getbImage(), labeledImage.getCategory(), labeledImage.getName());
-	}
+	}*/
 
-	public double addCategoricalImage(BufferedImage bi, int category, String uniqueId) {
+	public double addCategoricalImage(Bitmap bi, int category, String uniqueId) {
 		int i = 0;
 		Hash[] hashes = new Hash[this.steps.size()];
 		for (HashingAlgorithm hashAlgorithm : this.steps) {
@@ -375,7 +374,7 @@ public class CategoricalMatcher extends AbstractCategoricalMatcher {
 	 *         image. Smaller distances meaning a closer match
 	 */
 	@Override
-	public CategorizationResult categorizeImage(BufferedImage bi) {
+	public CategorizationResult categorizeImage(Bitmap bi) {
 		CategorizationResult catResult = this.categorizeImage(null, bi);
 		if (subCategoryMatcher.containsKey(catResult.getCategory())) {
 			// If this return cat 1 we don't know which category it actually belongs to
@@ -396,7 +395,7 @@ public class CategoricalMatcher extends AbstractCategoricalMatcher {
 	 *         returns a distance measure between the category and the supplied
 	 *         image
 	 */
-	protected CategorizationResult categorizeImage(String uniqueId, BufferedImage bi) {
+	protected CategorizationResult categorizeImage(String uniqueId, Bitmap bi) {
 		Hash[] hashes = new Hash[this.steps.size()];
 		int j = 0;
 		// Compute hashes for the image
@@ -482,7 +481,7 @@ public class CategoricalMatcher extends AbstractCategoricalMatcher {
 	}
 
 	@Override
-	public CategorizationResult categorizeImageAndAdd(BufferedImage bi, String uniqueId) {
+	public CategorizationResult categorizeImageAndAdd(Bitmap bi, String uniqueId) {
 
 		if (this.steps.isEmpty()) {
 			throw new IllegalStateException("Please add a hashing algorithm before categorizing images");
@@ -549,7 +548,7 @@ public class CategoricalMatcher extends AbstractCategoricalMatcher {
 
 	// Debug functions
 
-	public BufferedImage categoricalHashToImage(HashingAlgorithm hashAlgorithm, int category, int blockSize) {
+	public Bitmap categoricalHashToImage(HashingAlgorithm hashAlgorithm, int category, int blockSize) {
 		if (!categories.contains(category)) {
 			throw new IllegalArgumentException("No entry for category: " + category + " found");
 		}

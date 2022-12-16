@@ -1,6 +1,6 @@
 package dev.brachtendorf.jimagehash.matcher.persistent;
 
-import java.awt.image.BufferedImage;
+import android.graphics.Bitmap;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
@@ -79,18 +79,7 @@ public abstract class PersitentBinaryTreeMatcher extends PersistentImageMatcher 
 	}
 
 	@Override
-	public PriorityQueue<Result<String>> getMatchingImages(File image) throws IOException {
-		if (cacheAddedHashes && addedImages.contains(image.getAbsolutePath())) {
-			// Quick retrieval possible. We don't need to read the file since the hashes are
-			// cached
-			return getMatchingImagesInternal(null, image.getAbsolutePath());
-		} else {
-			return super.getMatchingImages(image);
-		}
-	}
-
-	@Override
-	public PriorityQueue<Result<String>> getMatchingImages(BufferedImage image) {
+	public PriorityQueue<Result<String>> getMatchingImages(Bitmap image) {
 		return getMatchingImagesInternal(image, null);
 	}
 
@@ -109,7 +98,7 @@ public abstract class PersitentBinaryTreeMatcher extends PersistentImageMatcher 
 	 * @return a list of unique id's identifying the previously matched images
 	 *         sorted by distance.
 	 */
-	protected abstract PriorityQueue<Result<String>> getMatchingImagesInternal(BufferedImage bi, String uniqueId);
+	protected abstract PriorityQueue<Result<String>> getMatchingImagesInternal(Bitmap bi, String uniqueId);
 
 	/**
 	 * Append a new hashing algorithm which will be executed after all hash
@@ -159,7 +148,7 @@ public abstract class PersitentBinaryTreeMatcher extends PersistentImageMatcher 
 	}
 
 	@Override
-	protected void addImageInternal(String uniqueId, BufferedImage image) {
+	protected void addImageInternal(String uniqueId, Bitmap image) {
 		if (addedImages.contains(uniqueId)) {
 			LOGGER.info("An image with uniqueId already exists. Skip request");
 		}
@@ -225,7 +214,7 @@ public abstract class PersitentBinaryTreeMatcher extends PersistentImageMatcher 
 		return true;
 	}
 
-	protected Hash getHash(HashingAlgorithm algo, String uniqueId, BufferedImage bImage) {
+	protected Hash getHash(HashingAlgorithm algo, String uniqueId, Bitmap bImage) {
 		if (uniqueId != null && cachedHashes.get(algo).containsKey(uniqueId)) {
 			return cachedHashes.get(algo).get(uniqueId);
 		}

@@ -1,6 +1,6 @@
 package dev.brachtendorf.jimagehash.matcher.persistent;
 
-import java.awt.image.BufferedImage;
+import android.graphics.Bitmap;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map.Entry;
@@ -168,7 +168,7 @@ public class CumulativeMatcher extends PersitentBinaryTreeMatcher {
 	}
 
 	@Override
-	protected PriorityQueue<Result<String>> getMatchingImagesInternal(BufferedImage image, String uniqueId) {
+	protected PriorityQueue<Result<String>> getMatchingImagesInternal(Bitmap image, String uniqueId) {
 
 		if (steps.isEmpty())
 			throw new IllegalStateException(

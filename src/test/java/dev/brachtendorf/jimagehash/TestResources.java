@@ -7,9 +7,6 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.math.BigInteger;
 
-import javax.imageio.ImageIO;
-
-
 import org.junit.jupiter.api.Test;
 
 import dev.brachtendorf.jimagehash.hash.Hash;
