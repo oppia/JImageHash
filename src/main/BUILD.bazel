@@ -5,6 +5,6 @@ android_library(
     deps = [
         "@maven//:dev_brachtendorf_pcg_java_10",
         "@maven//:com_github_wendykierp_JTransforms",
-        "@dev_brachtendorf_UtilityCode//src/main:utilitycode",
+        "@jimagehash_utilitycode//src/main:utilitycode",
     ],
 )

@@ -40,7 +40,7 @@ maven_install(
 load("@bazel_tools//tools/build_defs/repo:git.bzl", "git_repository")
 
 git_repository(
-    name = "dev_brachtendorf_UtilityCode",
+    name = "jimagehash_utilitycode",
     remote = "https://github.com/oppia/JImageHashUtilityCode",
     commit = "53b348f75d248a9b8fce6ebcabd5486f8b6e59ce",
     shallow_since = "1671174743 -0800",
